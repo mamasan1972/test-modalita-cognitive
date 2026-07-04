@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test modalità cognitive</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --ink: #1a1a1a;
+    --paper: #f7f4ef;
+    --gold: #b8935a;
+    --gold-light: #e8d5b5;
+    --mist: #e8e4dd;
+    --shadow: rgba(26,26,26,0.08);
+    --stimulator: #7b6fa0;
+    --mover: #4a7c6f;
+    --perceiver: #8a5a4a;
+    --adapter: #4a6a8a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  .header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+  }
+
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    margin-bottom: 0.8rem;
+  }
+
+  .header h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .header p {
+    font-size: 0.85rem;
+    color: #aaa;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .intro {
+    background: white;
+    border-left: 3px solid var(--gold);
+    padding: 1.5rem 1.8rem;
+    margin: 2rem 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #333;
+  }
+
+  .progress-bar {
+    background: var(--mist);
+    height: 4px;
+    border-radius: 2px;
+    margin: 2rem 0 2.5rem;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    background: var(--gold);
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-label {
+    font-size: 0.78rem;
+    color: #888;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .question-block {
+    background: white;
+    border-radius: 2px;
+    padding: 2rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 1px 8px var(--shadow);
+    display: none;
+  }
+
+  .question-block.active { display: block; }
+
+  .q-number {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    font-weight: 500;
+  }
+
+  .q-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 1.8rem;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    border: 1.5px solid var(--mist);
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--paper);
+  }
+
+  .option:hover {
+    border-color: var(--gold);
+    background: white;
+  }
+
+  .option.selected {
+    border-color: var(--ink);
+    background: white;
+  }
+
+  .option-letter {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--gold);
+    min-width: 1.2rem;
+    padding-top: 0.05rem;
+  }
+
+  .option-text {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #333;
+  }
+
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.8rem;
+    gap: 1rem;
+  }
+
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 0.8rem 1.8rem;
+    border: 1.5px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 1px;
+  }
+
+  .btn:hover { background: var(--ink); color: var(--paper); }
+  .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn:disabled:hover { background: transparent; color: var(--ink); }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .btn-primary:hover {
+    background: #333;
+    border-color: #333;
+  }
+
+  /* RISULTATI */
+  .result-section {
+    display: none;
+  }
+
+  .result-section.visible { display: block; }
+
+  .result-header {
+    text-align: center;
+    padding: 3rem 0 2rem;
+  }
+
+  .result-profile-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 7vw, 4rem);
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-subtitle {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #888;
+  }
+
+  .score-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 2rem 0;
+  }
+
+  .score-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 2px;
+    box-shadow: 0 1px 8px var(--shadow);
+  }
+
+  .score-card .label {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 0.5rem;
+  }
+
+  .score-card .profile-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+  }
+
+  .score-bar-bg {
+    background: var(--mist);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 0.4rem;
+  }
+
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.8s ease;
+  }
+
+  .score-card.stimulator .profile-name { color: var(--stimulator); }
+  .score-card.stimulator .score-bar-fill { background: var(--stimulator); }
+  .score-card.mover .profile-name { color: var(--mover); }
+  .score-card.mover .score-bar-fill { background: var(--mover); }
+  .score-card.perceiver .profile-name { color: var(--perceiver); }
+  .score-card.perceiver .score-bar-fill { background: var(--perceiver); }
+  .score-card.adapter .profile-name { color: var(--adapter); }
+  .score-card.adapter .score-bar-fill { background: var(--adapter); }
+
+  .score-number {
+    font-size: 0.78rem;
+    color: #888;
+  }
+
+  .result-description {
+    background: white;
+    border-radius: 2px;
+    padding: 2.5rem;
+    box-shadow: 0 1px 8px var(--shadow);
+    margin: 2rem 0;
+  }
+
+  .result-description h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    margin-bottom: 1.2rem;
+    line-height: 1.3;
+  }
+
+  .result-description p {
+    font-size: 0.92rem;
+    line-height: 1.75;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+
+  .result-description p:last-child { margin-bottom: 0; }
+
+  .strength-shadow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .strength-shadow > div {
+    padding: 1.2rem;
+    border-radius: 2px;
+  }
+
+  .strength-box { background: #f0f7f4; }
+  .shadow-box { background: #faf0f0; }
+
+  .strength-shadow h3 {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    font-weight: 500;
+  }
+
+  .strength-box h3 { color: #4a7c6f; }
+  .shadow-box h3 { color: #8a4a4a; }
+
+  .strength-shadow ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .strength-shadow ul li {
+    font-size: 0.86rem;
+    line-height: 1.6;
+    color: #333;
+    padding-left: 1rem;
+    position: relative;
+    margin-bottom: 0.4rem;
+  }
+
+  .strength-shadow ul li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    color: #999;
+  }
+
+  .matrix-visual {
+    background: white;
+    border-radius: 2px;
+    padding: 2rem;
+    box-shadow: 0 1px 8px var(--shadow);
+    margin: 2rem 0;
+  }
+
+  .matrix-visual h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    color: #555;
+    font-weight: 400;
+  }
+
+  .matrix {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr;
+    gap: 0.5rem;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .matrix-label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #aaa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.3rem;
+  }
+
+  .matrix-label.vertical {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    min-width: 2rem;
+    padding: 0.5rem 0;
+  }
+
+  .matrix-cell {
+    padding: 1rem 0.8rem;
+    border-radius: 2px;
+    text-align: center;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    opacity: 0.35;
+    transition: opacity 0.3s;
+    border: 1.5px solid transparent;
+  }
+
+  .matrix-cell.highlighted {
+    opacity: 1;
+    border-color: currentColor;
+  }
+
+  .matrix-cell.stimulator { background: #ede9f5; color: var(--stimulator); }
+  .matrix-cell.mover { background: #e8f3f0; color: var(--mover); }
+  .matrix-cell.perceiver { background: #f5ede9; color: var(--perceiver); }
+  .matrix-cell.adapter { background: #e9eef5; color: var(--adapter); }
+
+  .restart-btn {
+    text-align: center;
+    margin-top: 2.5rem;
+  }
+
+  .disclaimer {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #aaa;
+    margin-top: 2.5rem;
+    line-height: 1.6;
+    padding: 0 1rem;
+  }
+
+  @media (max-width: 520px) {
+    .score-grid { grid-template-columns: 1fr; }
+    .strength-shadow { grid-template-columns: 1fr; }
+    .matrix { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Test delle <em>modalità cognitive</em></h1>
+  <p>Basato sulla teoria di Kosslyn e Miller &mdash; Domande originali</p>
+</div>
+
+<div class="container" id="test-container">
+
+  <div class="intro">
+    Questo test esplora come il tuo cervello tende a elaborare il mondo: quanto pianifichi e quanto osservi, quanto generi e quanto recepisci. Non ci sono risposte giuste o sbagliate. Scegli quella che descrive meglio il tuo comportamento reale, non come vorresti essere.
+  </div>
+
+  <div class="progress-label" id="progress-label">Domanda 1 di 20</div>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress-fill" style="width:5%"></div>
+  </div>
+
+  <!-- DOMANDE -->
+  <!-- Q1 -->
+  <div class="question-block active" data-q="1">
+    <div class="q-number">Domanda 01</div>
+    <div class="q-text">Quando inizi un nuovo progetto, qual è il tuo primo impulso naturale?</div>
+    <div class="options">
+      <div class="option" data-score="M"><span class="option-letter">A</span><span class="option-text">Abbozzare subito un piano con tappe e obiettivi precisi</span></div>
+      <div class="option" data-score="S"><span class="option-letter">B</span><span class="option-text">Generare idee in libertà, senza pensare ancora a come realizzarle</span></div>
+      <div class="option" data-score="P"><span class="option-letter">C</span><span class="option-text">Osservare con calma la situazione prima di fare qualsiasi cosa</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Iniziare a fare qualcosa di concreto e adattarmi strada facendo</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn" disabled>← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="question-block" data-q="2">
+    <div class="q-number">Domanda 02</div>
+    <div class="q-text">Dopo una conversazione intensa, cosa fai più spesso?</div>
+    <div class="options">
+      <div class="option" data-score="P"><span class="option-letter">A</span><span class="option-text">Ci ripenso per giorni, scoprendo significati che non avevo colto sul momento</span></div>
+      <div class="option" data-score="M"><span class="option-letter">B</span><span class="option-text">Valuto cosa ha funzionato e cosa cambierei la prossima volta</span></div>
+      <div class="option" data-score="S"><span class="option-letter">C</span><span class="option-text">Passo subito ad altro; la conversazione ha già generato nuovi pensieri</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">La lascio andare; il momento era quello, non serve rielaborarla</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="question-block" data-q="3">
+    <div class="q-number">Domanda 03</div>
+    <div class="q-text">Stai spiegando qualcosa di complesso a qualcuno. Come procedi di solito?</div>
+    <div class="options">
+      <div class="option" data-score="M"><span class="option-letter">A</span><span class="option-text">Struttura la spiegazione in passi logici e verifico la comprensione a ogni passaggio</span></div>
+      <div class="option" data-score="S"><span class="option-letter">B</span><span class="option-text">Parto da un'immagine o una metafora e sviluppo da lì, seguendo l'ispirazione</span></div>
+      <div class="option" data-score="P"><span class="option-letter">C</span><span class="option-text">Cerco prima di capire cosa sa già l'altro, poi adatto il discorso al suo contesto</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Rispondo alle domande man mano che arrivano, senza pianificare in anticipo</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="question-block" data-q="4">
+    <div class="q-number">Domanda 04</div>
+    <div class="q-text">Quando qualcosa va storto in un progetto, qual è la tua reazione più spontanea?</div>
+    <div class="options">
+      <div class="option" data-score="M"><span class="option-letter">A</span><span class="option-text">Analizzo cosa non ha funzionato e aggiusto il piano</span></div>
+      <div class="option" data-score="S"><span class="option-letter">B</span><span class="option-text">Cambio strada e cerco un approccio completamente diverso</span></div>
+      <div class="option" data-score="P"><span class="option-letter">C</span><span class="option-text">Capisco prima il perché profondo dell'errore, anche se richiede tempo</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Gestisco l'immediato e vedo cosa succede dopo</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="question-block" data-q="5">
+    <div class="q-number">Domanda 05</div>
+    <div class="q-text">Come descrivi meglio il tuo rapporto con le idee?</div>
+    <div class="options">
+      <div class="option" data-score="S"><span class="option-letter">A</span><span class="option-text">Ne genero molte, spesso più di quante riesca a realizzare</span></div>
+      <div class="option" data-score="M"><span class="option-letter">B</span><span class="option-text">Seleziono le idee più promettenti e le sviluppo con metodo</span></div>
+      <div class="option" data-score="P"><span class="option-letter">C</span><span class="option-text">Preferisco poche idee ma lavorate in profondità</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Le idee mi vengono nel fare, non tanto nella riflessione astratta</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="question-block" data-q="6">
+    <div class="q-number">Domanda 06</div>
+    <div class="q-text">In un gruppo di lavoro, quale ruolo ti viene più naturale?</div>
+    <div class="options">
+      <div class="option" data-score="M"><span class="option-letter">A</span><span class="option-text">Coordinare, assegnare compiti e monitorare i progressi</span></div>
+      <div class="option" data-score="S"><span class="option-letter">B</span><span class="option-text">Proporre soluzioni originali e ispirare gli altri</span></div>
+      <div class="option" data-score="P"><span class="option-letter">C</span><span class="option-text">Osservare le dinamiche del gruppo e offrire letture profonde della situazione</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Rispondere alle necessità del momento, dove serve</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="question-block" data-q="7">
+    <div class="q-number">Domanda 07</div>
+    <div class="q-text">Quando ascolti qualcuno che ti racconta un problema, tendi a…</div>
+    <div class="options">
+      <div class="option" data-score="M"><span class="option-letter">A</span><span class="option-text">Iniziare a pensare subito a possibili soluzioni pratiche</span></div>
+      <div class="option" data-score="P"><span class="option-letter">B</span><span class="option-text">Sentire in profondità cosa c'è sotto le parole dette</span></div>
+      <div class="option" data-score="S"><span class="option-letter">C</span><span class="option-text">Fare connessioni con altre situazioni o storie simili</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Rispondere a ciò che emerge nel momento, senza schema preciso</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="question-block" data-q="8">
+    <div class="q-number">Domanda 08</div>
+    <div class="q-text">Come ti orienti in un luogo nuovo?</div>
+    <div class="options">
+      <div class="option" data-score="M"><span class="option-letter">A</span><span class="option-text">Studio la mappa, mi faccio una struttura mentale dello spazio</span></div>
+      <div class="option" data-score="P"><span class="option-letter">B</span><span class="option-text">Assorbo l'atmosfera e i dettagli, mi lascio guidare dalle sensazioni</span></div>
+      <div class="option" data-score="S"><span class="option-letter">C</span><span class="option-text">Esploro liberamente, cambio direzione seguendo la curiosità</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Seguo chi è con me o chiedo indicazioni al volo</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q9 -->
+  <div class="question-block" data-q="9">
+    <div class="q-number">Domanda 09</div>
+    <div class="q-text">Rispetto alle conseguenze delle tue azioni, generalmente…</div>
+    <div class="options">
+      <div class="option" data-score="M"><span class="option-letter">A</span><span class="option-text">Le valuto prima di agire e le monitoro durante</span></div>
+      <div class="option" data-score="S"><span class="option-letter">B</span><span class="option-text">Le scopro spesso dopo; prima agisco, poi vedo cosa è successo</span></div>
+      <div class="option" data-score="P"><span class="option-letter">C</span><span class="option-text">Le sento prima ancora che accadano, a volte mi bloccano</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Non mi ci soffermo molto; gestisco ciò che viene</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q10 -->
+  <div class="question-block" data-q="10">
+    <div class="q-number">Domanda 10</div>
+    <div class="q-text">Come vivi il silenzio in una relazione importante?</div>
+    <div class="options">
+      <div class="option" data-score="P"><span class="option-letter">A</span><span class="option-text">Lo leggo, lo interpreto, ci trovo messaggi e sfumature</span></div>
+      <div class="option" data-score="M"><span class="option-letter">B</span><span class="option-text">Lo valuto: capisco se è un segnale e decido come rispondere</span></div>
+      <div class="option" data-score="S"><span class="option-letter">C</span><span class="option-text">Mi stimola: riempie il vuoto con pensieri, immagini, connessioni</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Lo accetto semplicemente; è parte del flusso naturale</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q11 -->
+  <div class="question-block" data-q="11">
+    <div class="q-number">Domanda 11</div>
+    <div class="q-text">Quando leggi o studi qualcosa di nuovo, come procedi?</div>
+    <div class="options">
+      <div class="option" data-score="S"><span class="option-letter">A</span><span class="option-text">Salto avanti e indietro, seguo l'interesse del momento</span></div>
+      <div class="option" data-score="M"><span class="option-letter">B</span><span class="option-text">Prendo appunti strutturati e verifico di aver capito prima di andare avanti</span></div>
+      <div class="option" data-score="P"><span class="option-letter">C</span><span class="option-text">Leggo lentamente, lasciando che i significati si stratifichino</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Leggo quando e come capita, senza un metodo preciso</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q12 -->
+  <div class="question-block" data-q="12">
+    <div class="q-number">Domanda 12</div>
+    <div class="q-text">Quando prendi una decisione importante, cosa pesa di più?</div>
+    <div class="options">
+      <div class="option" data-score="M"><span class="option-letter">A</span><span class="option-text">Una valutazione razionale di pro e contro, con un piano alternativo</span></div>
+      <div class="option" data-score="S"><span class="option-letter">B</span><span class="option-text">Una visione di dove potrebbe portare, anche se incerta</span></div>
+      <div class="option" data-score="P"><span class="option-letter">C</span><span class="option-text">Una sensazione profonda che qualcosa è giusto o sbagliato</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Cosa sembra più fattibile in questo momento specifico</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q13 -->
+  <div class="question-block" data-q="13">
+    <div class="q-number">Domanda 13</div>
+    <div class="q-text">Hai appena vissuto qualcosa di intenso. Cosa succede di solito?</div>
+    <div class="options">
+      <div class="option" data-score="P"><span class="option-letter">A</span><span class="option-text">L'elaborazione dura giorni; continuo a scoprire strati di significato</span></div>
+      <div class="option" data-score="M"><span class="option-letter">B</span><span class="option-text">Tiro le fila abbastanza in fretta e mi preparo a ciò che viene dopo</span></div>
+      <div class="option" data-score="S"><span class="option-letter">C</span><span class="option-text">Si trasforma subito in energia, nuove idee, voglia di creare</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Mi immergo nel prossimo momento; l'elaborazione arriva da sola</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q14 -->
+  <div class="question-block" data-q="14">
+    <div class="q-number">Domanda 14</div>
+    <div class="q-text">Come ti poni rispetto alle regole e alle strutture stabilite?</div>
+    <div class="options">
+      <div class="option" data-score="M"><span class="option-letter">A</span><span class="option-text">Le uso come punto di partenza e le adatto quando serve</span></div>
+      <div class="option" data-score="S"><span class="option-letter">B</span><span class="option-text">Spesso le ignoro: le soluzioni che cerco sono fuori dagli schemi</span></div>
+      <div class="option" data-score="P"><span class="option-letter">C</span><span class="option-text">Le comprendo in profondità prima di decidere se seguirle o no</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Le seguo finché hanno senso pratico nella situazione data</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q15 -->
+  <div class="question-block" data-q="15">
+    <div class="q-number">Domanda 15</div>
+    <div class="q-text">Come vivi i cambiamenti improvvisi nei tuoi piani?</div>
+    <div class="options">
+      <div class="option" data-score="M"><span class="option-letter">A</span><span class="option-text">Li integro rapidamente: aggiusto il piano e riparto</span></div>
+      <div class="option" data-score="S"><span class="option-letter">B</span><span class="option-text">Li accetto volentieri: spesso portano opportunità inaspettate</span></div>
+      <div class="option" data-score="P"><span class="option-letter">C</span><span class="option-text">Li elaboro con calma: ho bisogno di capire prima di muovermi</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Mi adatto subito: vivo comunque nel momento</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q16 -->
+  <div class="question-block" data-q="16">
+    <div class="q-number">Domanda 16</div>
+    <div class="q-text">Quando crei qualcosa (testo, progetto, opera), come sai quando è finito?</div>
+    <div class="options">
+      <div class="option" data-score="M"><span class="option-letter">A</span><span class="option-text">Quando risponde a tutti i criteri che avevo stabilito all'inizio</span></div>
+      <div class="option" data-score="S"><span class="option-letter">B</span><span class="option-text">Non è mai davvero finito; mi fermo quando devo consegnarlo</span></div>
+      <div class="option" data-score="P"><span class="option-letter">C</span><span class="option-text">Quando sento che ha detto ciò che doveva dire</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Quando il momento richiedeva quella cosa lì</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q17 -->
+  <div class="question-block" data-q="17">
+    <div class="q-number">Domanda 17</div>
+    <div class="q-text">Come reagisci di fronte a una persona che ti colpisce profondamente?</div>
+    <div class="options">
+      <div class="option" data-score="S"><span class="option-letter">A</span><span class="option-text">Genero subito immagini, scenari, possibilità di relazione</span></div>
+      <div class="option" data-score="M"><span class="option-letter">B</span><span class="option-text">Osservo, valuto, decido come avvicinarmi</span></div>
+      <div class="option" data-score="P"><span class="option-letter">C</span><span class="option-text">La sento in profondità: capisco chi è prima ancora che parli</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Rispondo al momento: quello che succede accade naturalmente</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q18 -->
+  <div class="question-block" data-q="18">
+    <div class="q-number">Domanda 18</div>
+    <div class="q-text">Come lavori meglio?</div>
+    <div class="options">
+      <div class="option" data-score="M"><span class="option-letter">A</span><span class="option-text">Con obiettivi chiari, scadenze e la possibilità di rivedere il percorso</span></div>
+      <div class="option" data-score="S"><span class="option-letter">B</span><span class="option-text">Con libertà totale: i vincoli mi bloccano, l'apertura mi apre</span></div>
+      <div class="option" data-score="P"><span class="option-letter">C</span><span class="option-text">Con tempo sufficiente per approfondire senza fretta</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">In risposta a ciò che serve: mi attivo sul bisogno reale</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q19 -->
+  <div class="question-block" data-q="19">
+    <div class="q-number">Domanda 19</div>
+    <div class="q-text">Qual è il tuo rapporto con i dettagli?</div>
+    <div class="options">
+      <div class="option" data-score="M"><span class="option-letter">A</span><span class="option-text">Li gestisco con metodo: ogni dettaglio fa parte del piano</span></div>
+      <div class="option" data-score="S"><span class="option-letter">B</span><span class="option-text">Preferisco il quadro generale; i dettagli vengono dopo</span></div>
+      <div class="option" data-score="P"><span class="option-letter">C</span><span class="option-text">I dettagli mi attraggono: nei piccoli segni c'è il significato profondo</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Me ne occupo quando è necessario, senza un approccio fisso</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary next-btn">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- Q20 -->
+  <div class="question-block" data-q="20">
+    <div class="q-number">Domanda 20</div>
+    <div class="q-text">Come descrivi il tuo modo di stare nel mondo?</div>
+    <div class="options">
+      <div class="option" data-score="M"><span class="option-letter">A</span><span class="option-text">Costruisco, realizzo, aggiusto: mi muovo verso qualcosa</span></div>
+      <div class="option" data-score="S"><span class="option-letter">B</span><span class="option-text">Genero, apro, connetto: il campo intorno a me si espande</span></div>
+      <div class="option" data-score="P"><span class="option-letter">C</span><span class="option-text">Sento, assorbo, comprendo: vedo dentro le cose</span></div>
+      <div class="option" data-score="A"><span class="option-letter">D</span><span class="option-text">Fluisco, rispondo, mi adatto: sono nel momento</span></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn prev-btn">← Indietro</button>
+      <button class="btn btn-primary" id="calculate-btn" style="display:none">Calcola il profilo</button>
+      <button class="btn btn-primary next-btn" id="last-next">Avanti →</button>
+    </div>
+  </div>
+
+  <!-- RISULTATI -->
+  <div class="result-section" id="result-section">
+    <div class="result-header">
+      <div class="result-subtitle">La tua modalità dominante</div>
+      <div class="result-profile-name" id="result-name"></div>
+      <div class="result-subtitle" id="result-axis" style="margin-top:0.5rem"></div>
+    </div>
+
+    <div class="score-grid" id="score-grid"></div>
+
+    <div class="matrix-visual">
+      <h3>La tua posizione nella matrice delle modalità</h3>
+      <div class="matrix">
+        <div></div>
+        <div class="matrix-label">Sistema superiore<br>attivo</div>
+        <div class="matrix-label">Sistema superiore<br>meno attivo</div>
+        <div class="matrix-label vertical">Sistema inferiore attivo</div>
+        <div class="matrix-cell mover" id="cell-mover">Dinamica<br>(Mover)</div>
+        <div class="matrix-cell perceiver" id="cell-perceiver">Percettiva<br>(Perceiver)</div>
+        <div class="matrix-label vertical">Sistema inferiore meno attivo</div>
+        <div class="matrix-cell stimulator" id="cell-stimulator">Stimolativa<br>(Stimulator)</div>
+        <div class="matrix-cell adapter" id="cell-adapter">Adattiva<br>(Adapter)</div>
+      </div>
+    </div>
+
+    <div class="result-description" id="result-description"></div>
+
+    <div class="disclaimer">
+      Test con domande originali ispirato alla teoria delle modalità cognitive di Kosslyn e Miller<br>
+      <em>Cervello alto e cervello basso</em>, Bollati Boringhieri 2015.<br>
+      I risultati descrivono tendenze, non categorie fisse.
+    </div>
+
+    <div class="restart-btn">
+      <button class="btn" onclick="restart()">Ripeti il test</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const scores = { M: 0, S: 0, P: 0, A: 0 };
+  const answers = {};
+  let currentQ = 1;
+  const totalQ = 20;
+
+  const profiles = {
+    M: {
+      name: 'Modalità dinamica',
+      eng: 'Mover',
+      color: '#4a7c6f',
+      axis: 'Sistema superiore alto · Sistema inferiore alto',
+      description: `<h2>Pianifichi, agisci, osservi, correggi.</h2>
+        <p>La modalità dinamica emerge quando entrambi i sistemi cerebrali, superiore e inferiore, sono altamente utilizzati. Chi pensa in questa modalità tende a formulare piani complessi, metterli in atto, rilevare le conseguenze e adeguare il percorso sulla base del feedback ricevuto.</p>
+        <p>Sei naturalmente a tuo agio in posizioni che richiedono pianificazione, azione e valutazione dei risultati. Non sei rigido nel piano iniziale: lo modifichi continuamente sulla base di ciò che osservi accadere. È questa flessibilità nel ciclo che ti distingue dagli altri profili.</p>
+        <div class="strength-shadow">
+          <div class="strength-box">
+            <h3>Punti di forza</h3>
+            <ul>
+              <li>Chiudi il ciclo: generi, agisci, osservi, correggi</li>
+              <li>Gestisci bene sia la visione che il monitoraggio</li>
+              <li>Sei efficace nei contesti relazionali complessi</li>
+              <li>Dosi le risposte con consapevolezza</li>
+              <li>Adatti il piano senza perderti in rigidità</li>
+            </ul>
+          </div>
+          <div class="shadow-box">
+            <h3>Lato ombra</h3>
+            <ul>
+              <li>Puoi temporizzare eccessivamente</li>
+              <li>Il controllo sui tempi può essere percepito come distanza</li>
+              <li>Chi aspetta una risposta può leggere la tua cautela come indifferenza</li>
+              <li>Il monitoraggio continuo può frenare l'impulso creativo</li>
+            </ul>
+          </div>
+        </div>`,
+      cssClass: 'mover'
+    },
+    S: {
+      name: 'Modalità stimolativa',
+      eng: 'Stimulator',
+      color: '#7b6fa0',
+      axis: 'Sistema superiore alto · Sistema inferiore meno attivo',
+      description: `<h2>Generi, apri, connetti. La strada non c'è: la apri tu.</h2>
+        <p>La modalità stimolativa emerge quando il sistema superiore è altamente utilizzato, mentre il sistema inferiore lo è meno. Chi pensa in questa modalità produce idee, visioni e connessioni in abbondanza, ma non sempre registra in tempo reale le conseguenze di ciò che mette in moto.</p>
+        <p>Sei il profilo più naturalmente creativo e visionario dei quattro. Eccelli nei contesti che richiedono pensiero laterale, apertura all'ambiguità, capacità di tenere insieme più livelli di significato simultaneamente. Costruisci sistemi simbolici, non ti limiti ad applicarli.</p>
+        <div class="strength-shadow">
+          <div class="strength-box">
+            <h3>Punti di forza</h3>
+            <ul>
+              <li>Generi connessioni inedite tra domini lontani</li>
+              <li>Apri strade che non esistevano prima</li>
+              <li>Tieni insieme ambiguità e profondità senza semplificare</li>
+              <li>Il tuo campo energetico si percepisce anche a distanza</li>
+              <li>Costruisci sistemi, non solo soluzioni</li>
+            </ul>
+          </div>
+          <div class="shadow-box">
+            <h3>Lato ombra</h3>
+            <ul>
+              <li>Non sempre calcoli le conseguenze di ciò che metti in moto</li>
+              <li>Puoi sovrastimare la chiarezza della tua visione per gli altri</li>
+              <li>Il feedback esterno viene registrato con latenza</li>
+              <li>Il ciclo generativo può continuare anche quando non serve</li>
+            </ul>
+          </div>
+        </div>`,
+      cssClass: 'stimulator'
+    },
+    P: {
+      name: 'Modalità percettiva',
+      eng: 'Perceiver',
+      color: '#8a5a4a',
+      axis: 'Sistema superiore meno attivo · Sistema inferiore alto',
+      description: `<h2>Senti prima ancora che accada. Vedi dentro le cose.</h2>
+        <p>La modalità percettiva emerge quando il sistema inferiore è altamente utilizzato, mentre quello superiore lo è meno. Chi pensa in questa modalità usa il cervello basso per dare senso profondo a ciò che percepisce: interpreta le esperienze, le colloca in un contesto e ne comprende le implicazioni.</p>
+        <p>Sei un osservatore acuto e un interprete raffinato del campo. Leggi ciò che non viene detto, i segnali sottili, i silenzi. Elabori a lungo e in profondità prima di rispondere. Il significato ti arriva per stratificazione, non per deduzione logica.</p>
+        <div class="strength-shadow">
+          <div class="strength-box">
+            <h3>Punti di forza</h3>
+            <ul>
+              <li>Leggi il campo con precisione fine, anche nel silenzio</li>
+              <li>Dai senso profondo alle esperienze</li>
+              <li>Cogli le implicazioni prima che diventino evidenti</li>
+              <li>La tua comprensione è raramente superficiale</li>
+              <li>Ricordi e emozioni si stratificano in significato</li>
+            </ul>
+          </div>
+          <div class="shadow-box">
+            <h3>Lato ombra</h3>
+            <ul>
+              <li>Puoi faticare a tradurre la comprensione in azione</li>
+              <li>L'elaborazione può diventare immobilismo</li>
+              <li>Resti in osservazione quando servirebbero decisioni</li>
+              <li>La sensibilità al campo può diventare sovraccarico</li>
+            </ul>
+          </div>
+        </div>`,
+      cssClass: 'perceiver'
+    },
+    A: {
+      name: 'Modalità adattiva',
+      eng: 'Adapter',
+      color: '#4a6a8a',
+      axis: 'Sistema superiore meno attivo · Sistema inferiore meno attivo',
+      description: `<h2>Sei nel momento. Ti adatti. Fluisci.</h2>
+        <p>La modalità adattiva emerge quando nessuno dei due sistemi è altamente utilizzato nelle elaborazioni opzionali. Chi pensa in questa modalità non si coinvolge nell'avviare progetti complessi né è focalizzato sulla classificazione profonda delle esperienze. È aperto a lasciarsi assorbire da ciò che accade nell'immediato.</p>
+        <p>Sei orientato all'azione concreta e reattivo alle situazioni in corso. La tua forza è la presenza: sei dove sei, fai ciò che serve, senza il peso di piani rigidi o elaborazioni eccessive. La flessibilità è il tuo strumento principale.</p>
+        <div class="strength-shadow">
+          <div class="strength-box">
+            <h3>Punti di forza</h3>
+            <ul>
+              <li>Sei pienamente presente nel momento</li>
+              <li>Reagisci con agilità ai cambiamenti</li>
+              <li>Non ti impantani in piani o analisi eccessive</li>
+              <li>Sei efficace in contesti imprevedibili</li>
+              <li>La tua flessibilità è una risorsa rara</li>
+            </ul>
+          </div>
+          <div class="shadow-box">
+            <h3>Lato ombra</h3>
+            <ul>
+              <li>Puoi faticare con progetti a lungo termine</li>
+              <li>La visione strategica non è il tuo punto forte</li>
+              <li>Rischi di perdere il filo senza strutture esterne</li>
+              <li>L'adattamento continuo può disperdere le energie</li>
+            </ul>
+          </div>
+        </div>`,
+      cssClass: 'adapter'
+    }
+  };
+
+  function updateProgress() {
+    const pct = Math.round((currentQ / totalQ) * 100);
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('progress-label').textContent = `Domanda ${currentQ} di ${totalQ}`;
+  }
+
+  function showQuestion(n) {
+    document.querySelectorAll('.question-block').forEach(b => b.classList.remove('active'));
+    const block = document.querySelector(`[data-q="${n}"]`);
+    if (block) block.classList.add('active');
+    currentQ = n;
+    updateProgress();
+
+    if (n === 20) {
+      document.getElementById('last-next').style.display = 'none';
+      document.getElementById('calculate-btn').style.display = 'block';
+    } else {
+      document.getElementById('last-next').style.display = 'block';
+      document.getElementById('calculate-btn').style.display = 'none';
+    }
+
+    if (answers[n]) {
+      const block = document.querySelector(`[data-q="${n}"]`);
+      block.querySelectorAll('.option').forEach(o => {
+        o.classList.toggle('selected', o.dataset.score === answers[n]);
+      });
+    }
+  }
+
+  document.querySelectorAll('.option').forEach(opt => {
+    opt.addEventListener('click', function() {
+      const block = this.closest('.question-block');
+      block.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+      this.classList.add('selected');
+      const q = parseInt(block.dataset.q);
+      const prev = answers[q];
+      if (prev) scores[prev]--;
+      answers[q] = this.dataset.score;
+      scores[this.dataset.score]++;
+    });
+  });
+
+  document.querySelectorAll('.next-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const block = this.closest('.question-block');
+      const q = parseInt(block.dataset.q);
+      if (!answers[q]) { block.style.animation = 'none'; block.offsetHeight; return; }
+      showQuestion(q + 1);
+    });
+  });
+
+  document.querySelectorAll('.prev-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const block = this.closest('.question-block');
+      const q = parseInt(block.dataset.q);
+      if (q > 1) showQuestion(q - 1);
+    });
+  });
+
+  document.getElementById('calculate-btn').addEventListener('click', function() {
+    if (!answers[20]) return;
+    showResults();
+  });
+
+  function showResults() {
+    document.getElementById('test-container').style.display = 'none';
+    const rs = document.getElementById('result-section');
+    rs.classList.add('visible');
+
+    const max = Math.max(scores.M, scores.S, scores.P, scores.A);
+    const dominant = Object.keys(scores).find(k => scores[k] === max);
+    const p = profiles[dominant];
+
+    document.getElementById('result-name').textContent = p.name;
+    document.getElementById('result-name').style.color = p.color;
+    document.getElementById('result-axis').textContent = p.axis;
+
+    const total = totalQ;
+    const grid = document.getElementById('score-grid');
+    grid.innerHTML = '';
+    ['M','S','P','A'].forEach(k => {
+      const pr = profiles[k];
+      const pct = Math.round((scores[k] / total) * 100);
+      grid.innerHTML += `
+        <div class="score-card ${pr.cssClass}">
+          <div class="label">Modalità</div>
+          <div class="profile-name">${pr.name}</div>
+          <div class="score-bar-bg"><div class="score-bar-fill" style="width:${pct}%"></div></div>
+          <div class="score-number">${scores[k]} risposte · ${pct}%</div>
+        </div>`;
+    });
+
+    ['mover','stimulator','perceiver','adapter'].forEach(c => {
+      document.getElementById('cell-'+c).classList.remove('highlighted');
+    });
+    document.getElementById('cell-' + p.cssClass).classList.add('highlighted');
+
+    document.getElementById('result-description').innerHTML = p.description;
+  }
+
+  function restart() {
+    Object.keys(scores).forEach(k => scores[k] = 0);
+    Object.keys(answers).forEach(k => delete answers[k]);
+    document.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+    document.getElementById('result-section').classList.remove('visible');
+    document.getElementById('test-container').style.display = 'block';
+    showQuestion(1);
+  }
+
+  updateProgress();
+</script>
+</body>
+</html>

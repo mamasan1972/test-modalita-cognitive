@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Come penso e creo – Test modalità cognitive</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --ink: #1a1a1a;
+    --paper: #f7f4ef;
+    --gold: #b8935a;
+    --gold-light: #e8d5b5;
+    --mist: #e8e4dd;
+    --shadow: rgba(26,26,26,0.08);
+    --stimulator: #7b6fa0;
+    --mover: #4a7c6f;
+    --perceiver: #8a5a4a;
+    --adapter: #4a6a8a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+  }
+
+  .header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+  }
+
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+  }
+
+  .header h1 em { font-style: italic; color: var(--gold-light); }
+
+  .header p {
+    font-size: 0.8rem;
+    color: #aaa;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .intro {
+    background: white;
+    border-left: 3px solid var(--gold);
+    padding: 1.4rem 1.6rem;
+    margin: 2rem 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #333;
+  }
+
+  .scale-legend {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border-radius: 2px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 1px 6px var(--shadow);
+    gap: 0.5rem;
+  }
+
+  .scale-legend .label { font-size: 0.75rem; color: #888; white-space: nowrap; }
+
+  .scale-legend .dots { display: flex; gap: 0.5rem; align-items: center; }
+
+  .scale-legend .dot {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 1.5px solid var(--mist);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.78rem; font-weight: 500; color: #aaa;
+  }
+
+  .q-block {
+    background: white;
+    border-radius: 2px;
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 6px var(--shadow);
+  }
+
+  .q-header {
+    display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1rem;
+  }
+
+  .q-num {
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); font-weight: 500; min-width: 2.2rem; padding-top: 0.15rem;
+  }
+
+  .q-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; line-height: 1.5; color: var(--ink);
+  }
+
+  .q-scale { display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+
+  .scale-btn {
+    width: 44px; height: 44px; border-radius: 50%;
+    border: 1.5px solid var(--mist); background: var(--paper);
+    font-size: 0.9rem; font-weight: 500; color: #888;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .scale-btn:hover { border-color: var(--gold); color: var(--ink); background: white; }
+  .scale-btn.selected { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+  .scale-labels {
+    display: flex; justify-content: space-between;
+    margin-top: 0.5rem; padding: 0 0.2rem;
+  }
+
+  .scale-labels span { font-size: 0.65rem; color: #bbb; letter-spacing: 0.04em; }
+
+  .submit-area { text-align: center; margin-top: 2.5rem; }
+
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 500; padding: 0.9rem 2.2rem;
+    border: 1.5px solid var(--ink); background: var(--ink);
+    color: var(--paper); cursor: pointer; transition: all 0.2s; border-radius: 1px;
+  }
+
+  .btn:hover { background: #333; border-color: #333; }
+  .btn.outline { background: transparent; color: var(--ink); }
+  .btn.outline:hover { background: var(--ink); color: var(--paper); }
+
+  .error-msg { color: #c0392b; font-size: 0.82rem; margin-top: 0.8rem; display: none; }
+
+  #result-section { display: none; }
+  #result-section.visible { display: block; }
+
+  .result-top { text-align: center; padding: 2.5rem 0 2rem; }
+
+  .result-profile {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-weight: 300; letter-spacing: 0.03em; line-height: 1.1; margin-bottom: 0.4rem;
+  }
+
+  .result-eng { font-size: 0.8rem; letter-spacing: 0.14em; text-transform: uppercase; color: #999; margin-bottom: 0.3rem; }
+  .result-nuance { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 1.05rem; color: #666; margin-top: 0.5rem; }
+
+  .scores-panel {
+    background: white; border-radius: 2px; padding: 1.8rem;
+    box-shadow: 0 1px 8px var(--shadow); margin: 1.5rem 0;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+  }
+
+  .score-item h3 { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: #aaa; margin-bottom: 0.5rem; }
+  .score-value { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 300; line-height: 1; margin-bottom: 0.3rem; }
+  .score-item.alto .score-value { color: var(--mover); }
+  .score-item.basso .score-value { color: var(--perceiver); }
+  .score-class { font-size: 0.78rem; color: #666; line-height: 1.4; }
+  .score-bar-bg { background: var(--mist); height: 5px; border-radius: 3px; margin-top: 0.8rem; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 3px; }
+  .score-item.alto .score-bar-fill { background: var(--mover); }
+  .score-item.basso .score-bar-fill { background: var(--perceiver); }
+
+  .matrix-panel {
+    background: white; border-radius: 2px; padding: 1.8rem;
+    box-shadow: 0 1px 8px var(--shadow); margin: 1.5rem 0;
+  }
+
+  .matrix-panel h3 {
+    font-family: 'Cormorant Garamond', serif; font-size: 1rem;
+    font-weight: 400; color: #666; margin-bottom: 1.2rem; text-align: center;
+  }
+
+  .matrix {
+    display: grid; grid-template-columns: auto 1fr 1fr;
+    grid-template-rows: auto 1fr 1fr; gap: 0.4rem;
+    max-width: 380px; margin: 0 auto;
+  }
+
+  .m-label {
+    font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.07em; color: #bbb;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 0.2rem; line-height: 1.3;
+  }
+
+  .m-label.vert { writing-mode: vertical-rl; transform: rotate(180deg); min-width: 1.8rem; padding: 0.4rem 0; font-size: 0.58rem; }
+
+  .m-cell {
+    padding: 0.9rem 0.6rem; border-radius: 2px; text-align: center;
+    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.03em;
+    opacity: 0.25; transition: all 0.4s; border: 1.5px solid transparent; line-height: 1.4;
+  }
+
+  .m-cell.on { opacity: 1; border-color: currentColor; transform: scale(1.03); }
+  .m-cell.mover { background: #e8f3f0; color: var(--mover); }
+  .m-cell.perceiver { background: #f5ede9; color: var(--perceiver); }
+  .m-cell.stimulator { background: #ede9f5; color: var(--stimulator); }
+  .m-cell.adapter { background: #e9eef5; color: var(--adapter); }
+
+  .desc-panel {
+    background: white; border-radius: 2px; padding: 2rem;
+    box-shadow: 0 1px 8px var(--shadow); margin: 1.5rem 0;
+  }
+
+  .desc-panel h2 {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.5rem;
+    font-weight: 400; line-height: 1.3; margin-bottom: 1rem;
+  }
+
+  .desc-panel p { font-size: 0.9rem; line-height: 1.75; color: #333; margin-bottom: 0.9rem; }
+
+  .ss-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.2rem; }
+  .ss-box { padding: 1.1rem; border-radius: 2px; }
+  .ss-box.s { background: #f0f7f4; }
+  .ss-box.o { background: #faf0f0; }
+  .ss-box h4 { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 0.7rem; }
+  .ss-box.s h4 { color: #4a7c6f; }
+  .ss-box.o h4 { color: #8a4a4a; }
+  .ss-box ul { list-style: none; padding: 0; }
+  .ss-box ul li { font-size: 0.84rem; line-height: 1.6; color: #333; padding-left: 1rem; position: relative; margin-bottom: 0.3rem; }
+  .ss-box ul li::before { content: '·'; position: absolute; left: 0; color: #bbb; }
+
+  .disclaimer { text-align: center; font-size: 0.73rem; color: #aaa; margin-top: 2rem; line-height: 1.7; padding: 0 1rem; }
+  .restart-area { text-align: center; margin-top: 2rem; }
+
+  @media (max-width: 500px) {
+    .scores-panel { grid-template-columns: 1fr; }
+    .ss-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Come <em>penso</em> e come <em>creo</em></h1>
+  <p>Test modalità cognitive · Ispirato a Kosslyn & Miller</p>
+</div>
+
+<div class="container">
+
+  <div class="intro">
+    Per ogni affermazione indica il tuo grado di accordo su una scala da 1 a 5, dove 1 = totale disaccordo e 5 = totale accordo. Rispondi pensando a come funzioni davvero quando pensi, crei, generi idee o lavori su qualcosa che ti coinvolge.
+  </div>
+
+  <div class="scale-legend">
+    <span class="label">Totale disaccordo</span>
+    <div class="dots">
+      <div class="dot">1</div><div class="dot">2</div><div class="dot">3</div><div class="dot">4</div><div class="dot">5</div>
+    </div>
+    <span class="label">Totale accordo</span>
+  </div>
+
+  <div id="questions-container"></div>
+
+  <div class="submit-area">
+    <button class="btn" onclick="calculate()">Calcola il profilo</button>
+    <div class="error-msg" id="error-msg"></div>
+  </div>
+
+  <div id="result-section">
+    <div class="result-top">
+      <div class="result-eng" id="r-eng"></div>
+      <div class="result-profile" id="r-name"></div>
+      <div class="result-nuance" id="r-nuance"></div>
+    </div>
+
+    <div class="scores-panel">
+      <div class="score-item alto">
+        <h3>Sistema superiore (generazione)</h3>
+        <div class="score-value" id="r-alto">–</div>
+        <div class="score-class" id="r-alto-class"></div>
+        <div class="score-bar-bg"><div class="score-bar-fill" id="r-alto-bar" style="width:0%"></div></div>
+      </div>
+      <div class="score-item basso">
+        <h3>Sistema inferiore (ricezione)</h3>
+        <div class="score-value" id="r-basso">–</div>
+        <div class="score-class" id="r-basso-class"></div>
+        <div class="score-bar-bg"><div class="score-bar-fill" id="r-basso-bar" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="matrix-panel">
+      <h3>La tua posizione nella matrice delle modalità</h3>
+      <div class="matrix">
+        <div></div>
+        <div class="m-label">Sistema superiore<br>attivo</div>
+        <div class="m-label">Sistema superiore<br>meno attivo</div>
+        <div class="m-label vert">Sistema inferiore attivo</div>
+        <div class="m-cell mover" id="c-mover">Dinamica<br>(Mover)</div>
+        <div class="m-cell perceiver" id="c-perceiver">Percettiva<br>(Perceiver)</div>
+        <div class="m-label vert">Sistema inferiore meno attivo</div>
+        <div class="m-cell stimulator" id="c-stimulator">Stimolativa<br>(Stimulator)</div>
+        <div class="m-cell adapter" id="c-adapter">Adattiva<br>(Adapter)</div>
+      </div>
+    </div>
+
+    <div class="desc-panel" id="r-desc"></div>
+
+    <div class="disclaimer">
+      Test con domande originali ispirato alla teoria delle modalità cognitive di Kosslyn e Miller.<br>
+      <em>Cervello alto e cervello basso</em>, Bollati Boringhieri 2015.<br>
+      I risultati descrivono tendenze nel pensiero creativo, non categorie fisse.
+    </div>
+
+    <div class="restart-area">
+      <button class="btn outline" onclick="restart()">Ripeti il test</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// A = sistema superiore (pianificazione, generazione, struttura)
+// B = sistema inferiore (ricezione, interpretazione, senso profondo)
+const questions = [
+  { n:1,  text: "Quando inizio a creare qualcosa, ho già in testa una struttura prima di iniziare.", type:"A" },
+  { n:2,  text: "Quando creo, noto che le emozioni del momento entrano nel lavoro e lo cambiano.", type:"B" },
+  { n:3,  text: "Preferisco avere un piano chiaro anche per i progetti creativi.", type:"A" },
+  { n:4,  text: "Mentre lavoro, sento spesso significati che non avevo previsto all'inizio.", type:"B" },
+  { n:5,  text: "Mi piace costruire sistemi: strutture che tengono insieme molte cose diverse.", type:"A" },
+  { n:6,  text: "Quando leggo o ascolto qualcosa, lo lascio risuonare dentro prima di rispondere.", type:"B" },
+  { n:7,  text: "Genero idee in sequenza: una porta all'altra in modo organizzato.", type:"A" },
+  { n:8,  text: "Spesso capisco il senso di un'esperienza solo giorni dopo che è accaduta.", type:"B" },
+  { n:9,  text: "Durante la creazione verifico se il risultato corrisponde a quello che avevo in mente.", type:"A" },
+  { n:10, text: "Percepisco il campo emotivo di una situazione prima ancora che venga detto nulla.", type:"B" },
+  { n:11, text: "Mi piace definire gli obiettivi di un lavoro creativo prima di iniziare.", type:"A" },
+  { n:12, text: "Le mie idee migliori arrivano in stati di rilassamento o semi-trance, non nel pensiero attivo.", type:"B" },
+  { n:13, text: "Quando creo, mi piace vedere i progressi e aggiustare il percorso man mano.", type:"A" },
+  { n:14, text: "Sento profonde risonanze tra esperienze apparentemente diverse.", type:"B" },
+  { n:15, text: "Prima di consegnare un lavoro, verifico sistematicamente che risponda agli obiettivi.", type:"A" },
+  { n:16, text: "Quando scrivo o creo in uno stato alterato, il risultato è più vero di quando sono pienamente sveglio.", type:"B" },
+  { n:17, text: "Mi piace organizzare le idee in strutture visibili: mappe, schemi, liste.", type:"A" },
+  { n:18, text: "Noto dettagli simbolici o emotivi che gli altri sembrano non cogliere.", type:"B" },
+  { n:19, text: "Quando lavoro su un progetto, tengo traccia di cosa funziona e cosa no.", type:"A" },
+  { n:20, text: "Il mio modo di ricevere il mondo (suoni, atmosfere, presenze) entra direttamente nel mio lavoro creativo.", type:"B" },
+];
+
+const answers = {};
+
+function buildQuestions() {
+  const container = document.getElementById('questions-container');
+  questions.forEach(q => {
+    const block = document.createElement('div');
+    block.className = 'q-block';
+    block.innerHTML = `
+      <div class="q-header">
+        <span class="q-num">${String(q.n).padStart(2,'0')}</span>
+        <span class="q-text">${q.text}</span>
+      </div>
+      <div class="q-scale">
+        ${[1,2,3,4,5].map(v => `<button class="scale-btn" data-q="${q.n}" data-v="${v}" onclick="selectAnswer(${q.n},${v},this)">${v}</button>`).join('')}
+      </div>
+      <div class="scale-labels"><span>Totale disaccordo</span><span>Totale accordo</span></div>`;
+    container.appendChild(block);
+  });
+}
+
+function selectAnswer(q, v, btn) {
+  answers[q] = v;
+  document.querySelectorAll(`.scale-btn[data-q="${q}"]`).forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function classifyAlto(score) {
+  if (score > 47) return { label: "Tendenza molto forte a generare e pianificare", short: "Molto forte alto" };
+  if (score > 37) return { label: "Tendenza a generare e pianificare", short: "Alto" };
+  if (score >= 27) return { label: "Tendenza a non pianificare in modo strutturato", short: "Non alto" };
+  return { label: "Tendenza molto forte a non pianificare", short: "Molto forte non alto" };
+}
+
+function classifyBasso(score) {
+  if (score > 43) return { label: "Tendenza molto forte a ricevere e interpretare in profondità", short: "Molto forte basso" };
+  if (score > 33) return { label: "Tendenza a ricevere e interpretare", short: "Basso" };
+  if (score >= 23) return { label: "Tendenza a non elaborare in profondità", short: "Non basso" };
+  return { label: "Tendenza molto forte a non elaborare in profondità", short: "Molto forte non basso" };
+}
+
+function getProfile(alto, basso) {
+  const a = alto.short;
+  const b = basso.short;
+  const map = {
+    "Molto forte alto|Molto forte basso":     { name:"Modalità dinamica", eng:"Mover", nuance:"Costantemente in modalità dinamica", css:"mover" },
+    "Alto|Basso":                             { name:"Modalità dinamica", eng:"Mover", nuance:"Contesto-dipendente", css:"mover" },
+    "Molto forte alto|Basso":                { name:"Modalità dinamica", eng:"Mover", nuance:"Talvolta modalità stimolativa", css:"mover" },
+    "Alto|Molto forte basso":                { name:"Modalità dinamica", eng:"Mover", nuance:"Talvolta modalità percettiva", css:"mover" },
+    "Molto forte non alto|Molto forte basso": { name:"Modalità percettiva", eng:"Perceiver", nuance:"Costantemente in modalità percettiva", css:"perceiver" },
+    "Non alto|Basso":                         { name:"Modalità percettiva", eng:"Perceiver", nuance:"Contesto-dipendente", css:"perceiver" },
+    "Non alto|Molto forte basso":            { name:"Modalità percettiva", eng:"Perceiver", nuance:"Talvolta modalità dinamica", css:"perceiver" },
+    "Molto forte non alto|Basso":            { name:"Modalità percettiva", eng:"Perceiver", nuance:"Talvolta modalità adattiva", css:"perceiver" },
+    "Molto forte alto|Molto forte non basso": { name:"Modalità stimolativa", eng:"Stimulator", nuance:"Costantemente in modalità stimolativa", css:"stimulator" },
+    "Alto|Non basso":                         { name:"Modalità stimolativa", eng:"Stimulator", nuance:"Contesto-dipendente", css:"stimulator" },
+    "Molto forte alto|Non basso":            { name:"Modalità stimolativa", eng:"Stimulator", nuance:"Talvolta modalità dinamica", css:"stimulator" },
+    "Alto|Molto forte non basso":            { name:"Modalità stimolativa", eng:"Stimulator", nuance:"Talvolta modalità adattiva", css:"stimulator" },
+    "Molto forte non alto|Molto forte non basso":{ name:"Modalità adattiva", eng:"Adapter", nuance:"Costantemente in modalità adattiva", css:"adapter" },
+    "Non alto|Non basso":                     { name:"Modalità adattiva", eng:"Adapter", nuance:"Contesto-dipendente", css:"adapter" },
+    "Molto forte non alto|Non basso":        { name:"Modalità adattiva", eng:"Adapter", nuance:"Talvolta modalità percettiva", css:"adapter" },
+    "Non alto|Molto forte non basso":        { name:"Modalità adattiva", eng:"Adapter", nuance:"Talvolta modalità stimolativa", css:"adapter" },
+  };
+  return map[`${a}|${b}`] || { name:"Modalità adattiva", eng:"Adapter", nuance:"Contesto-dipendente", css:"adapter" };
+}
+
+const descriptions = {
+  mover: {
+    title: "Pianifichi, generi, osservi, correggi.",
+    body: `<p>Nel pensiero creativo usi entrambi i sistemi con forza. Generi idee con struttura, verifichi i risultati mentre lavori, aggiusti il percorso in tempo reale. Il tuo processo creativo è il più completo dei quattro: apre e chiude il ciclo.</p>
+    <p>Non sei rigido nel piano iniziale. Lo modifichi continuamente sulla base di ciò che scopri mentre crei. Tieni insieme visione e monitoraggio senza sacrificare l'uno per l'altro.</p>`,
+    forze:["Chiudi il ciclo creativo: generi, esegui, valuti, correggi","Tieni insieme struttura e apertura","Sei efficace sia nei progetti complessi che in quelli intuitivi","Monitori il processo senza perdere la visione d'insieme","Adatti il piano senza perderti"],
+    ombra:["Puoi temporizzare troppo prima di rilasciare il lavoro","Il controllo del processo può frenare l'impulso più libero","Chi lavora con te può percepire la tua cautela come chiusura","Il monitoraggio continuo può esaurire l'energia creativa"]
+  },
+  stimulator: {
+    title: "La strada non c'è: la apri tu.",
+    body: `<p>Nel pensiero creativo il tuo sistema superiore è molto attivo: generi, pianifichi visioni, costruisci strutture simboliche. Il sistema inferiore meno dominante significa che non sempre registri in tempo reale le conseguenze di ciò che metti in moto creativamente.</p>
+    <p>Sei il profilo più naturalmente generativo dei quattro. Le tue idee aprono strade che non esistevano. Il processo creativo per te è un atto di apertura, non di chiusura.</p>`,
+    forze:["Generi connessioni inedite tra domini lontani","Costruisci sistemi simbolici complessi","Apri strade creative che gli altri non vedono","Il tuo campo creativo si percepisce anche senza spiegazioni","Eccelli nell'ambiguità e nella complessità"],
+    ombra:["Non sempre calcoli dove porta ciò che apri","Puoi non accorgerti dell'impatto del tuo lavoro sugli altri","Il feedback esterno viene registrato con latenza","Il ciclo generativo può continuare anche quando non serve"]
+  },
+  perceiver: {
+    title: "Ricevi prima ancora di capire. Il senso arriva dopo.",
+    body: `<p>Nel pensiero creativo il tuo sistema inferiore è molto attivo: interpreti in profondità, assorbi significati, lasci che le esperienze si stratifichino prima di rispondere. Non pianifichi molto in anticipo: il processo si rivela mentre lo vivi.</p>
+    <p>Sei un ricevitore raffinato. Cogli ciò che gli altri non vedono. Il tuo lavoro creativo nasce dall'interpretazione profonda di ciò che hai vissuto, sentito, assorbito nel tempo.</p>`,
+    forze:["Leggi il campo sottile con precisione","Dai senso profondo alle esperienze","Il tuo lavoro ha strati che si scoprono nel tempo","Ricordi ed emozioni si stratificano in significato creativo","Cogli implicazioni prima che diventino evidenti"],
+    ombra:["Puoi faticare a tradurre la profondità in forma","L'elaborazione può bloccare la produzione","Resti in ricezione quando servirebbe azione","La ricchezza interiore non sempre trova espressione esterna"]
+  },
+  adapter: {
+    title: "Crei nel momento. Il processo è il lavoro.",
+    body: `<p>Nel pensiero creativo non hai un'elaborazione opzionale dominante. Non pianifichi molto in anticipo e non elabori in profondità a posteriori. Sei nel momento: la creazione accade mentre fai, non prima né dopo.</p>
+    <p>La tua forza creativa è la presenza e la reattività. Sei efficace nei contesti che richiedono improvvisazione, adattamento, risposta immediata. Il tuo processo creativo è fluido e situazionale.</p>`,
+    forze:["Sei pienamente presente nel processo creativo","Reagisci con agilità agli stimoli del momento","Non ti impantani in piani rigidi","La tua creatività è fluida e situazionale","Eccelli nell'improvvisazione"],
+    ombra:["Puoi faticare con progetti creativi a lungo termine","La visione strutturata non è il tuo punto forte","Senza stimoli esterni il processo può fermarsi","L'adattamento continuo può disperdere l'energia creativa"]
+  }
+};
+
+function calculate() {
+  const missing = questions.filter(q => !answers[q.n]);
+  if (missing.length > 0) {
+    const err = document.getElementById('error-msg');
+    err.style.display = 'block';
+    err.textContent = `Mancano ${missing.length} rispost${missing.length > 1 ? 'e' : 'a'}: domand${missing.length > 1 ? 'e' : 'a'} ${missing.map(q => q.n).join(', ')}.`;
+    return;
+  }
+  document.getElementById('error-msg').style.display = 'none';
+
+  const altoQ  = questions.filter(q => q.type === 'A').map(q => q.n);
+  const bassoQ = questions.filter(q => q.type === 'B').map(q => q.n);
+
+  const scoreAlto  = altoQ.reduce((s,n)  => s + (answers[n] || 0), 0);
+  const scoreBasso = bassoQ.reduce((s,n) => s + (answers[n] || 0), 0);
+
+  const cAlto  = classifyAlto(scoreAlto);
+  const cBasso = classifyBasso(scoreBasso);
+  const profile = getProfile(cAlto, cBasso);
+
+  document.getElementById('r-alto').textContent  = scoreAlto;
+  document.getElementById('r-basso').textContent = scoreBasso;
+  document.getElementById('r-alto-class').textContent  = cAlto.label;
+  document.getElementById('r-basso-class').textContent = cBasso.label;
+  document.getElementById('r-alto-bar').style.width  = (scoreAlto  / 50 * 100) + '%';
+  document.getElementById('r-basso-bar').style.width = (scoreBasso / 50 * 100) + '%';
+
+  document.getElementById('r-name').textContent  = profile.name;
+  document.getElementById('r-name').style.color  = `var(--${profile.css})`;
+  document.getElementById('r-eng').textContent   = profile.eng;
+  document.getElementById('r-nuance').textContent = profile.nuance;
+
+  ['mover','perceiver','stimulator','adapter'].forEach(c => document.getElementById('c-'+c).classList.remove('on'));
+  document.getElementById('c-' + profile.css).classList.add('on');
+
+  const d = descriptions[profile.css];
+  document.getElementById('r-desc').innerHTML = `
+    <h2>${d.title}</h2>${d.body}
+    <div class="ss-grid">
+      <div class="ss-box s"><h4>Punti di forza</h4><ul>${d.forze.map(f=>`<li>${f}</li>`).join('')}</ul></div>
+      <div class="ss-box o"><h4>Lato ombra</h4><ul>${d.ombra.map(o=>`<li>${o}</li>`).join('')}</ul></div>
+    </div>`;
+
+  document.getElementById('questions-container').style.display = 'none';
+  document.querySelector('.submit-area').style.display = 'none';
+  document.querySelector('.scale-legend').style.display = 'none';
+  document.querySelector('.intro').style.display = 'none';
+  const rs = document.getElementById('result-section');
+  rs.style.display = 'block';
+  rs.classList.add('visible');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restart() {
+  Object.keys(answers).forEach(k => delete answers[k]);
+  document.querySelectorAll('.scale-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('questions-container').style.display = 'block';
+  document.querySelector('.submit-area').style.display = 'block';
+  document.querySelector('.scale-legend').style.display = 'flex';
+  document.querySelector('.intro').style.display = 'block';
+  document.getElementById('result-section').style.display = 'none';
+  document.getElementById('result-section').classList.remove('visible');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildQuestions();
+</script>
+</body>
+</html>
